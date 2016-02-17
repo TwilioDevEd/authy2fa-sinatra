@@ -10,7 +10,7 @@ module TwoFactorAuth
     set :root, File.dirname(__FILE__)
 
     get '/' do
-      '2 Factor Auth'
+      haml :home
     end
   end
 end
