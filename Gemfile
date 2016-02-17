@@ -8,5 +8,6 @@ group :test, :development do
 end
 
 group :test do
+  gem 'rake'
   gem 'rack-test'
 end
