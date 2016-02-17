@@ -6,6 +6,6 @@ RSpec.configure do |config|
   include Rack::Test::Methods
 
   def app
-    App
+    TwoFactorAuth::App
   end
 end
