@@ -1,0 +1,25 @@
+%h1 We're going to be *BEST* friends
+%p Thanks for your interest in signing up! Can you tell us a bit about yourself?
+
+%form{action: "/signup", method: "post"}
+  .form-group
+    %label{for: "name"} Tell us your name:
+    %input{type: "text", name: "name", class: "form-control", placeholder: "Zingelbert Bembledack"}
+
+  .form-group
+    %label{for: "email"} Enter Your E-mail Address:
+    %input{type: "text", name: "email", class: "form-control", placeholder: "me@mydomain.com"}
+
+  .form-group
+    %label{for: "password"} Enter a password:
+    %input{type: "password", name: "password", class: "form-control"}
+
+  .form-group
+    %label{for: "country_code"} Country code:
+    %input{type: "text", name: "country_code", class: "form-control"}
+
+  .form-group
+    %label{for: "phone_number"} Phone number:
+    %input{type: "text", name: "phone_number", class: "form-control"}
+
+  %button.btn.btn-primary Sign up
