@@ -4,6 +4,17 @@
     %title 2FA with Authy
     %link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css")
     %link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css")
+    %link(rel="stylesheet" href="stylesheets/main.css")
   %body
-    #content
+    %section#main.container
+      %nav.navbar.navbar-default
+        %a.navbar-brand(href="/") 2FA with Authy
+        %p#id.navbar-text.pull-right
+          %a(href="#") Sign Up
+          or
+          %a(href="#") Log In
+
       = yield
+
+    %footer.container
+      Made with <i class="fa fa-heart"></i> by your pals <a href="http://www.twilio.com">@twilio</a>
