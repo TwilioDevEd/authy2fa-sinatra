@@ -3,6 +3,7 @@ require 'bcrypt'
 require 'tilt/haml'
 
 require_relative './models/user'
+require_relative './lib/user_authenticator'
 
 ENV['RACK_ENV'] ||= 'development'
 
@@ -49,9 +50,6 @@ module TwoFactorAuth
       password_salt = BCrypt::Engine.generate_salt
       password_hash = BCrypt::Engine.hash_secret(password, password_salt)
 
-      p password_salt
-      p password_hash
-
       user = User.create!(
         username:      username,
         email:         email,
@@ -71,15 +69,23 @@ module TwoFactorAuth
       haml '/'
     end
 
+    get '/login' do
+      haml :login
+    end
+
     post '/login' do
-      user = nil
-      if user # Find a user with the username
-        if user[:passwordhash] == BCrypt::Engine.hash_secret(params[:password], user[:salt])
-          session[:username] = params[:username] # At this point the user is authenticated
-          redirect "/"
-        end
+      email    = params[:email]
+      password = params[:password]
+
+      # Find the user
+      user = User.first(email: email)
+      if user && UserAuthenticator.authenticate(
+        user.password_hash, user.password_salt, password)
+        session[:username] = user.username
+        redirect "/" # Redirect to protected location
       end
 
+      # You're not authorized. Add some error message.
       'error'
     end
 

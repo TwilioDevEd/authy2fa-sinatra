@@ -1,0 +1,13 @@
+%h1 Welcome Back
+%p You never write. You never call. But we're glad you came, regardless! Be a pal and confirm your username and password, would you?
+
+%form{action: "/login", method: "post"}
+  .form-group
+    %label{for: "email"} Email:
+    %input{type: "text", name: "email", class: "form-control"}
+
+  .form-group
+    %label{for: "password"} Password:
+    %input{type: "password", name: "password", class: "form-control"}
+
+  %button.btn.btn-primary Log In
