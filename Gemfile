@@ -6,6 +6,8 @@ gem 'pg'
 gem 'data_mapper'
 gem 'dm-postgres-adapter'
 gem 'bcrypt'
+gem 'authy'
+gem 'http-cookie'
 
 group :test, :development do
   gem 'rspec'

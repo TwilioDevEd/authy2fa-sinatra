@@ -1,9 +1,11 @@
 require 'sinatra/base'
 require 'bcrypt'
 require 'tilt/haml'
+require 'authy'
 
 require_relative './models/user'
 require_relative './lib/user_authenticator'
+require_relative './lib/authentication'
 
 ENV['RACK_ENV'] ||= 'development'
 
@@ -20,15 +22,7 @@ module TwoFactorAuth
   class App < Sinatra::Base
     enable :sessions
 
-    helpers do
-      def authenticated?
-        !session[:username].nil?
-      end
-
-      def username
-        session[:username]
-      end
-    end
+    helpers Authentication
 
     set :root, File.dirname(__FILE__)
 
@@ -61,12 +55,20 @@ module TwoFactorAuth
         authy_status:  ''
       )
 
-      p user
+      Authy.api_key = ENV['AUTHY_API_KEY']
+
+      authy = Authy::API.register_user(
+        email: user.email,
+        cellphone: user.phone_number,
+        country_code: user.country_code
+      )
+
+      user.update(authy_id: authy.id)
 
       session[:username] = username
 
       # Redirect to protected route
-      haml '/'
+      haml '/protected'
     end
 
     get '/login' do
@@ -85,13 +87,18 @@ module TwoFactorAuth
         redirect "/" # Redirect to protected location
       end
 
-      # You're not authorized. Add some error message.
+      # You're not authorized. Add some flash error message.
       'error'
     end
 
     post '/logout' do
       session[:username] = nil
       redirect '/' # redirect to some unprotected area
+    end
+
+    get '/protected' do
+      authenticate!
+      'voila'
     end
   end
 end
