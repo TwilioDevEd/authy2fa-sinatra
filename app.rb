@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'bcrypt'
 require 'tilt/haml'
 require 'authy'
+require 'json'
 
 require_relative './models/user'
 require_relative './lib/user_authenticator'
@@ -83,12 +84,26 @@ module TwoFactorAuth
       user = User.first(email: email)
       if user && UserAuthenticator.authenticate(
         user.password_hash, user.password_salt, password)
-        session[:username] = user.username
+
+        # The user is authenticated at this point
+        Authy.api_key = ENV['AUTHY_API_KEY']
+        one_touch = Authy::OneTouch.send_approval_request(
+          id: user.authy_id,
+          message: "Request to Login to Twilio demo app",
+          details: {
+            'Email Address' => user.email,
+          }
+        )
+
+        status = one_touch["success"] ? :onetouch : :sms
+        user.update!(authy_status: status)
+
+        session[:pre_2fa_auth_user_id] = user.id
         redirect "/" # Redirect to protected location
       end
 
       # You're not authorized. Add some flash error message.
-      'error'
+      "error"
     end
 
     post '/logout' do
@@ -99,6 +114,27 @@ module TwoFactorAuth
     get '/protected' do
       authenticate!
       'voila'
+    end
+
+    post '/callback' do
+      params       = JSON.parse(request.body.read)
+      authy_id     = params["authy_id"]
+      authy_status = params["status"]
+
+      begin
+        user = User.first(authy_id: authy_id)
+        user.update(authy_status: authy_status)
+      rescue => e
+        puts e.message
+      end
+      'OK'
+    end
+
+    get '/authy/status' do
+      user_id = '6' # session[:pre_2fa_auth_user_id]
+      user = User.first(id: user_id)
+
+      user.authy_status.to_s
     end
   end
 end

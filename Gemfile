@@ -6,7 +6,7 @@ gem 'pg'
 gem 'data_mapper'
 gem 'dm-postgres-adapter'
 gem 'bcrypt'
-gem 'authy'
+gem 'authy', :git => 'https://github.com/authy/authy-ruby.git'
 gem 'http-cookie'
 
 group :test, :development do
