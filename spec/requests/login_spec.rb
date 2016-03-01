@@ -24,12 +24,13 @@ describe 'POST /login' do
       .with('hash', 'salt', 'secret').and_return(true)
     allow(Authy::OneTouch).to receive(:send_approval_request)
       .and_return({"success" => true})
+    allow(SessionManager).to receive(:init_session)
 
     allow(user).to receive(:update!).with(authy_status: :onetouch)
 
     post '/login', email: 'bob@example.com', password: 'secret'
 
-    expect(last_response).to be_redirect
-    expect(last_response.status).to eq 302
+    expect(last_response.body).to eq("onetouch")
+    expect(last_response.status).to eq 200
   end
 end

@@ -8,6 +8,7 @@ $(document).ready(function() {
 
     var authyVerification = function (data) {
         $.post("/login", data, function (result) {
+            console.log(result);
             resultActions[result]();
         });
     };
@@ -28,17 +29,19 @@ $(document).ready(function() {
         },
 
         unauthorized: function () {
-            $("#error-message").text("Invalid credentials");
+            $("#error-message").text("The email and password you entered don't match.");
         }
     };
 
     var monitorOneTouchStatus = function () {
         $.post("/authy/status")
             .done(function (data) {
-                if (data === "") {
-                    setTimeout(monitorOneTouchStatus, 2000);
-                } else {
+              console.log("status: ", data);
+                if (data === "approved" || data === "rejected") {
                     $("#confirm-login").submit();
+                    console.log("authenticated");
+                } else {
+                    setTimeout(monitorOneTouchStatus, 2000);
                 }
             });
     }

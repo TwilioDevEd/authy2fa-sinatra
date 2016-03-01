@@ -1,7 +1,9 @@
 %h1 Welcome Back
 %p You never write. You never call. But we're glad you came, regardless! Be a pal and confirm your username and password, would you?
 
-%form{action: "/login", method: "post"}
+%p.text-danger#error-message
+
+%form{ action: "/login", method: "post", id: "login-form" }
   .form-group
     %label{for: "email"} Email:
     %input{type: "text", name: "email", class: "form-control"}
@@ -11,3 +13,18 @@
     %input{type: "password", name: "password", class: "form-control"}
 
   %button.btn.btn-primary Log In
+
+%form{ action: "/confirm-login", method: "post", id: "confirm-login" }
+
+.modal.fade#authy-modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h4.modal-title Please Authenticate
+      .modal-body.auth-ot
+        .help-block
+          %i.fa.fa-spinner.fa-pulse Waiting for OneTouch Approval
+      .modal-body.auth-token
+        .help-block
+          %i.fa.fa-spinner.fa-pulse Authy OneTouch is not available
+        Please enter your Token

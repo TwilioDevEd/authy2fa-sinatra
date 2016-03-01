@@ -6,10 +6,14 @@ module Authentication
   end
 
   def authenticated?
-    !session[:username].nil?
+    !session[:user_id].nil?
   end
 
-  def username
-    session[:username]
+  def pre_authenticated?
+    !session[:pre_2fa_auth_user_id].nil?
+  end
+
+  def user_id
+    session[:pre_2fa_auth_user_id] || session[:user_id]
   end
 end
