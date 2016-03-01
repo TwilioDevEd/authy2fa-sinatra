@@ -145,11 +145,14 @@ module TwoFactorAuth
 
       case authy_status
       when :approved
-        # Login
+        SessionManager.init_session(user.id)
+        redirect "/protected"
       when :denied
-        # Logout
+        SessionManager.destroy
+        redirect "/login"
       else
-        # Logout
+        SessionManager.destroy
+        redirect "/login"
       end
     end
   end
