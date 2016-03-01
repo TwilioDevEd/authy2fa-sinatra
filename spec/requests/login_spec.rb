@@ -9,11 +9,23 @@ end
 
 describe 'POST /login' do
   it 'authenticate the user when the credentials are correct' do
-    user = double('User', username: 'bob', password_hash: 'hash', password_salt: 'salt')
+    user = double(
+      'User',
+      id: '1',
+      username: 'bob',
+      email: 'bob@twilio.com',
+      password_hash: 'hash',
+      password_salt: 'salt',
+      authy_id: '1001'
+    )
 
     allow(User).to receive(:first).and_return(user)
     allow(UserAuthenticator).to receive(:authenticate)
       .with('hash', 'salt', 'secret').and_return(true)
+    allow(Authy::OneTouch).to receive(:send_approval_request)
+      .and_return({"success" => true})
+
+    allow(user).to receive(:update!).with(authy_status: :onetouch)
 
     post '/login', email: 'bob@example.com', password: 'secret'
 
