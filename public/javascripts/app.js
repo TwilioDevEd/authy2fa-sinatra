@@ -8,7 +8,6 @@ $(document).ready(function() {
 
     var authyVerification = function (data) {
         $.post("/login", data, function (result) {
-            console.log(result);
             resultActions[result]();
         });
     };
@@ -36,10 +35,8 @@ $(document).ready(function() {
     var monitorOneTouchStatus = function () {
         $.post("/authy/status")
             .done(function (data) {
-              console.log("status: ", data);
-                if (data === "approved" || data === "rejected") {
+                if (data === "approved" || data === "denied") {
                     $("#confirm-login").submit();
-                    console.log("authenticated");
                 } else {
                     setTimeout(monitorOneTouchStatus, 2000);
                 }

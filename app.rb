@@ -97,7 +97,7 @@ module TwoFactorAuth
         status = one_touch["success"] ? :onetouch : :sms
         user.update!(authy_status: status)
 
-        SessionManager.init_session(user.id)
+        pre_init_session!(user.id)
 
         # Return the authy status
         status.to_s
@@ -131,27 +131,21 @@ module TwoFactorAuth
     end
 
     post '/authy/status' do
-      user_id = Authentication.user_id
-      user = User.first(id: user_id)
-
+      user = User.first(id: current_user)
       user.authy_status.to_s
     end
 
     post '/confirm-login' do
-      # Find pre-logged user
+      user = User.first(id: current_user)
       authy_status = user.authy_status
 
       user.update(authy_status: :unverified)
 
-      case authy_status
-      when :approved
-        SessionManager.init_session(user.id)
+      if authy_status == :approved
+        init_session!(user.id)
         redirect "/protected"
-      when :denied
-        SessionManager.destroy
-        redirect "/login"
       else
-        SessionManager.destroy
+        destroy!
         redirect "/login"
       end
     end
