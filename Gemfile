@@ -11,6 +11,7 @@ gem 'http-cookie'
 
 group :test, :development do
   gem 'rspec'
+  gem 'database_cleaner'
 end
 
 group :test do

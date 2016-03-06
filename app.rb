@@ -17,7 +17,6 @@ Bundler.require :default, ENV['RACK_ENV'].to_sym
 database_url = 'postgres://localhost/authy2fa_sinatra'
 DataMapper.setup(:default, database_url)
 DataMapper.finalize
-
 User.auto_upgrade!
 
 module TwoFactorAuth

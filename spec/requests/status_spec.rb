@@ -1,13 +1,29 @@
 require_relative '../spec_helper'
 
 describe 'POST /authy/status' do
-  it 'foo' do
-    user = double('User', authy_status: :approved)
-    allow(User).to receive(:first).and_return(user)
-    allow(Authentication).to receive(:user_id)
+  context 'when the status is approved' do
+    it 'returns approved' do
+      user = User.create!(authy_status: :approved)
 
-    post '/authy/status'
+      allow_any_instance_of(TwoFactorAuth::App).to receive(:current_user) { user.id }
 
-    expect(last_response.status).to eq 200
+      post '/authy/status'
+
+      expect(last_response.status).to eq 200
+      expect(last_response.body).to eq('approved')
+    end
+  end
+
+  context 'when the status is denied' do
+    it 'returns approved' do
+      user = User.create!(authy_status: :denied)
+
+      allow_any_instance_of(TwoFactorAuth::App).to receive(:current_user) { user.id }
+
+      post '/authy/status'
+
+      expect(last_response.status).to eq 200
+      expect(last_response.body).to eq('denied')
+    end
   end
 end
