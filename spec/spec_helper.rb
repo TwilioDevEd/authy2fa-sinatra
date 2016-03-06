@@ -11,6 +11,7 @@ RSpec.configure do |config|
   DataMapper.finalize
   User.auto_upgrade!
 
+  config.formatter = :documentation
   config.before(:each) do
     DatabaseCleaner.start
   end
