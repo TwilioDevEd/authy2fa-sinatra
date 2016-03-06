@@ -15,7 +15,7 @@ describe 'POST /authy/status' do
   end
 
   context 'when the status is denied' do
-    it 'returns approved' do
+    it 'returns denied' do
       user = User.create!(authy_status: :denied)
 
       allow_any_instance_of(TwoFactorAuth::App).to receive(:current_user) { user.id }
