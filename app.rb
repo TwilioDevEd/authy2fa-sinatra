@@ -65,11 +65,11 @@ module TwoFactorAuth
         country_code: user.country_code
       )
 
-      user.update(authy_id: authy.id)
-      SessionManager.init_session(user.id)
+      user.update!(authy_id: authy.id)
+      init_session!(user.id)
 
       # Redirect to protected route
-      haml '/protected'
+      redirect '/protected'
     end
 
     get '/login' do
