@@ -10,9 +10,12 @@
       %nav.navbar.navbar-default
         %a.navbar-brand(href="/") 2FA with Authy
         %p#id.navbar-text.pull-right
-          %a(href="/signup") Sign Up
-          or
-          %a(href="/login") Log In
+          - if authenticated?
+            %a(href="/logout") Log Out
+          - else
+            %a(href="/signup") Sign Up
+            or
+            %a(href="/login") Log In
 
       = yield
 

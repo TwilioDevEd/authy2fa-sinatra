@@ -105,9 +105,9 @@ module TwoFactorAuth
       end
     end
 
-    post '/logout' do
-      SessionManager.destroy
-      redirect '/' # redirect to some unprotected area
+    get '/logout' do
+      destroy!
+      redirect '/login' # redirect to some unprotected area
     end
 
     get '/protected' do
