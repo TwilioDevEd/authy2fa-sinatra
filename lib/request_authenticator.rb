@@ -1,7 +1,7 @@
 require 'active_support/all'
 require 'json'
 require 'openssl'
-require 'Base64'
+require 'base64'
 
 module RequestAuthenticator
   def self.authenticate!(request, headers)
