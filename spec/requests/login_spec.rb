@@ -3,7 +3,7 @@ require_relative '../spec_helper'
 describe 'GET /login' do
   it 'is successful' do
     get '/login'
-    expect(last_response.status).to eq 200
+    expect(last_response).to be_ok
   end
 end
 
@@ -31,6 +31,6 @@ describe 'POST /login' do
     post '/login', email: 'bob@example.com', password: 'secret'
 
     expect(last_response.body).to eq("onetouch")
-    expect(last_response.status).to eq 200
+    expect(last_response).to be_ok
   end
 end

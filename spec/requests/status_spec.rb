@@ -9,7 +9,7 @@ describe 'POST /authy/status' do
 
       post '/authy/status'
 
-      expect(last_response.status).to eq 200
+      expect(last_response).to be_ok
       expect(last_response.body).to eq('approved')
     end
   end
@@ -22,7 +22,7 @@ describe 'POST /authy/status' do
 
       post '/authy/status'
 
-      expect(last_response.status).to eq 200
+      expect(last_response).to be_ok
       expect(last_response.body).to eq('denied')
     end
   end
