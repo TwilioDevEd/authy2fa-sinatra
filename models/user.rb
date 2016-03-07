@@ -14,6 +14,6 @@ class User
   property :authy_status, Enum[:unverified, :onetouch, :sms, :token, :approved, :denied], default: :unverified
 
   def approved?
-    return self[:authy_status] == :approved
+    self[:authy_status] == :approved
   end
 end

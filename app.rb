@@ -112,6 +112,9 @@ module TwoFactorAuth
 
     get '/protected' do
       authenticate!
+
+      @user = User.first(id: current_user)
+      haml :protected
     end
 
     post '/callback' do
