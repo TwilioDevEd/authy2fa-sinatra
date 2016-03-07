@@ -8,6 +8,7 @@ require_relative './models/user'
 require_relative './lib/user_authenticator'
 require_relative './lib/authentication'
 require_relative './lib/session_manager'
+require_relative './lib/request_authenticator'
 
 ENV['RACK_ENV'] ||= 'development'
 
@@ -118,6 +119,10 @@ module TwoFactorAuth
     end
 
     post '/callback' do
+      # Authenticate the request
+      RequestAuthenticator.authenticate!(request, headers)
+
+      request.body.rewind
       params       = JSON.parse(request.body.read)
       authy_id     = params["authy_id"]
       authy_status = params["status"]
