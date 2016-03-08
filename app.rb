@@ -4,11 +4,11 @@ require 'tilt/haml'
 require 'authy'
 require 'json'
 
-require_relative './models/user'
-require_relative './lib/user_authenticator'
-require_relative './lib/authentication'
-require_relative './lib/session_manager'
-require_relative './lib/request_authenticator'
+require_relative 'models/user'
+require_relative 'lib/user_authenticator'
+require_relative 'lib/authentication'
+require_relative 'lib/session_manager'
+require_relative 'lib/request_authenticator'
 
 ENV['RACK_ENV'] ||= 'development'
 
