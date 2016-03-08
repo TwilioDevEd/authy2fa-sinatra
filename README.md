@@ -7,23 +7,27 @@ This example application demonstrates how to use Authy as the two-factor authent
 ## Local Development
 
 
-1. First clone this repository:
+1. First clone this repository and `cd` into it
+
    ```bash
    $ git clone git@github.com:TwilioDevEd/authy2fa-sinatra.git
    $ cd authy2fa-sinatra
    ```
 
-1. Install the dependencies:
+1. Install the dependencies
+
    ```
    bundle
    ```
 
-1. Export the environment variables:
+1. Export the environment variables
+
    ```
    export AUTHY_API_KEY=YOUR_AUTHY_API_KEY
    ```
 
-1. Create the database.
+1. Create the database
+
    ```bash
    $ bundle exec rake db:create
    ```
@@ -32,17 +36,20 @@ This example application demonstrates how to use Authy as the two-factor authent
    don't have it already, you should install it. The easiest way is by
    using [Postgres.app](http://postgresapp.com/)._
 
-1. Make sure the tests succeed:
+1. Make sure the tests succeed
+
    ```
    $ bundle exec rake
    ```
 
-1. Run the application.
+1. Run the application
+
    ```bash
    $ bundle exec rackup
    ```
 
 1. To enable Authy OneTouch to use the callback endpoint you exposed, your development server will need to be publicly accessible. [We recommend using ngrok to solve this problem](//www.twilio.com/blog/2015/09/6-awesome-reasons-to-use-ngrok-when-testing-webhooks.html).
+
    ```bash
    $ ngrok http 9292
    ```
