@@ -25,7 +25,7 @@ describe 'POST /login' do
 
       allow_any_instance_of(TwoFactorAuth::App)
         .to receive(:valid_password?)
-        .with('secret', 'hash', 'salt')
+        .with('secret', 'hash')
         .and_return(true)
 
       allow(Authy::OneTouch)
