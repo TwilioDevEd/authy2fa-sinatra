@@ -10,9 +10,8 @@ require 'authy'
 require 'json'
 
 require_relative 'models/user'
+require_relative 'helpers'
 require_relative 'lib/user_authenticator'
-require_relative 'lib/authentication'
-require_relative 'lib/session_manager'
 require_relative 'lib/request_authenticator'
 
 
@@ -25,8 +24,7 @@ module TwoFactorAuth
   class App < Sinatra::Base
     enable :sessions
 
-    helpers Authentication
-    helpers SessionManager
+    helpers TwoFactorAuth::Helpers
 
     set :root, File.dirname(__FILE__)
 
@@ -70,15 +68,10 @@ module TwoFactorAuth
     end
 
     post '/login' do
-      email    = params[:email]
-      password = params[:password]
-
-      # Find the user
-      user = User.first(email: email)
+      user = User.first(email: params[:email])
       if user && UserAuthenticator.authenticate(
-        user.password_hash, user.password_salt, password)
+        user.password_hash, user.password_salt, params[:password])
 
-        # The user is authenticated at this point
         Authy.api_key = ENV['AUTHY_API_KEY']
         one_touch = Authy::OneTouch.send_approval_request(
           id: user.authy_id,
@@ -91,7 +84,6 @@ module TwoFactorAuth
 
         pre_init_session!(user.id)
 
-        # Return the authy status
         status.to_s
       else
         "unauthorized"
@@ -99,8 +91,8 @@ module TwoFactorAuth
     end
 
     get '/logout' do
-      destroy!
-      redirect '/login' # redirect to some unprotected area
+      destroy_session!
+      redirect '/login'
     end
 
     get '/protected' do
@@ -111,7 +103,6 @@ module TwoFactorAuth
     end
 
     post '/callback' do
-      # Authenticate the request
       RequestAuthenticator.authenticate!(request, headers)
 
       request.body.rewind
@@ -144,7 +135,7 @@ module TwoFactorAuth
         init_session!(user.id)
         redirect "/protected"
       else
-        destroy!
+        destroy_session!
         redirect "/login"
       end
     end
