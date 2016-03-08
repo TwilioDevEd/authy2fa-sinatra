@@ -10,8 +10,6 @@ require 'json'
 
 require_relative 'models/user'
 require_relative 'helpers'
-require_relative 'lib/request_authenticator'
-
 
 database_url = 'postgres://localhost/authy2fa_sinatra'
 DataMapper.setup(:default, database_url)
@@ -98,7 +96,7 @@ module TwoFactorAuth
     end
 
     post '/callback' do
-      RequestAuthenticator.authenticate!(request, headers)
+      authenticate_request!(request, headers)
 
       request.body.rewind
       params       = JSON.parse(request.body.read)
