@@ -28,7 +28,10 @@
     * [Getting Started with Sinatra](//www.sinatrarb.com/intro.html)
     * [Getting started with the Twilio Ruby gem](//twilio-ruby.readthedocs.org/en/latest/index.html#getting-started)
 
-.step(data-title='Configuring Authy', data-file='app.rb')
+.step(
+  data-title='Configuring Authy',
+  data-file='routes/signup.rb',
+  data-highlight='19')
   :markdown
     ## Configuring Authy
 
@@ -49,8 +52,8 @@
     * [Managing Environment Variables in Ruby](//www.twilio.com/blog/2015/02/managing-development-environment-variables-across-multiple-ruby-applications.html)
 
 .step(
-  data-file='app.rb',
-  data-highlight='40-74')
+  data-file='routes/signup.rb',
+  data-highlight='19-24')
   :markdown
     ## Registering a User with Authy
 
@@ -73,8 +76,8 @@
     * [Enabling a User with Authy](//docs.authy.com/#section-Enabling_two-factor_on_a_user)
 
 .step(
-  data-file='app.rb',
-  data-highlight='80-107')
+  data-file='routes/sessions.rb',
+  data-highlight='8-27')
   :markdown
     ## Logging in with Authy OneTouch
 
@@ -93,7 +96,9 @@
     In the next steps we'll look at how we handle cases where the User does not 
     have OneTouch, or denies the login request.
 
-.step(data-file='app.rb', data-highlight='89-98')
+.step(
+  data-file='routes/sessions.rb',
+  data-highlight='11-16')
   :markdown
     ## Sending the OneTouch Request
 
@@ -121,8 +126,8 @@
     * [DataMapper DM-Types](//datamapper.org/docs/dm_more/types.html)
 
 .step(
-  data-file='app.rb',
-  data-highlight='121-138')
+  data-file='routes/confirmation.rb',
+  data-highlight='4-20')
   :markdown
     ## Configuring the OneTouch callback
 
@@ -133,7 +138,7 @@
     endpoint.png)
 
     **Note:** In order to verify that the request is coming from Authy, we've
-    written the helper method `validate` that will halt the request if it
+    written the helper method `authenticate_request!` that will halt the request if it
     appears it isn't coming from Authy.
 
     Here in our callback, we look up the _user_ using the _Authy ID_ sent with
@@ -166,8 +171,8 @@
     * [jQuery submit()](//api.jquery.com/submit/)
 
 .step(
-  data-file='app.rb',
-  data-highlight='145-158')
+  data-file='routes/confirmation.rb',
+  data-highlight='27-40')
   :markdown
     ## Finish the 2FA Step
 
