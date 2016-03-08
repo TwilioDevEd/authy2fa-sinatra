@@ -8,9 +8,7 @@ module TwoFactorAuth
   module Helpers
     # Authentication
     def authenticate!
-      unless session[:user_id]
-        redirect '/login'
-      end
+      redirect '/login' unless authenticated?
     end
 
     def authenticated?
@@ -43,30 +41,28 @@ module TwoFactorAuth
       [password_salt, password_hash]
     end
 
-    def valid_password?(plain_password, password_hash, password_salt)
+    def valid_password?(plain_password, password_hash)
       password_hash == BCrypt::Engine.hash_secret(plain_password, password_hash)
     end
 
     # Request Authentication
-    def authenticate_request!(request, headers)
+    def authenticate_request!(request)
       url            = request.url
       request_method = request.request_method
-      nonce          = request.env["HTTP_X_AUTHY_SIGNATURE_NONCE"]
+      nonce          = request.env['HTTP_X_AUTHY_SIGNATURE_NONCE']
       raw_params     = JSON.parse(request.body.read)
       sorted_params  = (Hash[raw_params.sort]).to_query
 
-      data = nonce + "|" + request_method + "|" + url + "|" + sorted_params
+      data = nonce + '|' + request_method + '|' + url + '|' + sorted_params
 
       authy_api_key = ENV['AUTHY_API_KEY']
       digest = OpenSSL::HMAC.digest('sha256', authy_api_key, data)
       digest_in_base64 = Base64.encode64(digest)
 
-      theirs = (request.env['HTTP_X_AUTHY_SIGNATURE']).strip
-      mine   = digest_in_base64.strip
+      authy_signature          = (request.env['HTTP_X_AUTHY_SIGNATURE']).strip
+      computed_authy_signature = digest_in_base64.strip
 
-      unless theirs == mine
-        redirect '/login'
-      end
+      redirect '/login' if authy_signature != computed_authy_signature
     end
   end
 end

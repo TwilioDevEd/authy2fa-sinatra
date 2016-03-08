@@ -31,7 +31,6 @@ module TwoFactorAuth
     register Routes::Sessions
     register Routes::Confirmation
 
-
     get '/' do
       haml :home
     end

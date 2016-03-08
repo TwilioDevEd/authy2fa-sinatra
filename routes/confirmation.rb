@@ -2,12 +2,12 @@ module Routes
   module Confirmation
     def self.registered(app)
       app.post '/callback' do
-        authenticate_request!(request, headers)
+        authenticate_request!(request)
 
         request.body.rewind
         params       = JSON.parse(request.body.read)
-        authy_id     = params["authy_id"]
-        authy_status = params["status"]
+        authy_id     = params['authy_id']
+        authy_status = params['status']
 
         begin
           user = User.first(authy_id: authy_id)
@@ -32,10 +32,10 @@ module Routes
 
         if authy_status == :approved
           init_session!(user.id)
-          redirect "/protected"
+          redirect '/protected'
         else
           destroy_session!
-          redirect "/login"
+          redirect '/login'
         end
       end
     end
