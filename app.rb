@@ -1,3 +1,8 @@
+ENV['RACK_ENV'] ||= 'development'
+
+require 'bundler'
+Bundler.require :default, ENV['RACK_ENV'].to_sym
+
 require 'sinatra/base'
 require 'bcrypt'
 require 'tilt/haml'
@@ -10,10 +15,6 @@ require_relative 'lib/authentication'
 require_relative 'lib/session_manager'
 require_relative 'lib/request_authenticator'
 
-ENV['RACK_ENV'] ||= 'development'
-
-require 'bundler'
-Bundler.require :default, ENV['RACK_ENV'].to_sym
 
 database_url = 'postgres://localhost/authy2fa_sinatra'
 DataMapper.setup(:default, database_url)
@@ -38,28 +39,20 @@ module TwoFactorAuth
     end
 
     post '/signup' do
-      username     = params[:name]
-      email        = params[:email]
-      password     = params[:password]
-      country_code = params[:country_code]
-      phone_number = params[:phone_number]
-
+      password      = params[:password]
       password_salt = BCrypt::Engine.generate_salt
       password_hash = BCrypt::Engine.hash_secret(password, password_salt)
 
       user = User.create!(
-        username:      username,
-        email:         email,
+        username:      params[:username],
+        email:         params[:email],
         password_salt: password_salt,
         password_hash: password_hash,
-        country_code:  country_code,
-        phone_number:  phone_number,
-        authy_id:      '',
-        authy_status:  ''
+        country_code:  params[:country_code],
+        phone_number:  params[:phone_number]
       )
 
       Authy.api_key = ENV['AUTHY_API_KEY']
-
       authy = Authy::API.register_user(
         email: user.email,
         cellphone: user.phone_number,
@@ -69,7 +62,6 @@ module TwoFactorAuth
       user.update!(authy_id: authy.id)
       init_session!(user.id)
 
-      # Redirect to protected route
       redirect '/protected'
     end
 

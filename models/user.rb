@@ -10,7 +10,7 @@ class User
   property :password_hash, Text
   property :country_code, String
   property :phone_number, String
-  property :authy_id, String
+  property :authy_id, String, default: ''
   property :authy_status, Enum[:unverified, :onetouch, :sms, :token, :approved, :denied], default: :unverified
 
   def approved?
