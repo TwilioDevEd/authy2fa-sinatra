@@ -4,14 +4,12 @@ require 'bundler'
 Bundler.require :default, ENV['RACK_ENV'].to_sym
 
 require 'sinatra/base'
-require 'bcrypt'
 require 'tilt/haml'
 require 'authy'
 require 'json'
 
 require_relative 'models/user'
 require_relative 'helpers'
-require_relative 'lib/user_authenticator'
 require_relative 'lib/request_authenticator'
 
 
@@ -37,10 +35,7 @@ module TwoFactorAuth
     end
 
     post '/signup' do
-      password      = params[:password]
-      password_salt = BCrypt::Engine.generate_salt
-      password_hash = BCrypt::Engine.hash_secret(password, password_salt)
-
+      password_salt, password_hash = hash_password(params[:password])
       user = User.create!(
         username:      params[:username],
         email:         params[:email],
@@ -69,8 +64,8 @@ module TwoFactorAuth
 
     post '/login' do
       user = User.first(email: params[:email])
-      if user && UserAuthenticator.authenticate(
-        user.password_hash, user.password_salt, params[:password])
+      if user && valid_password?(
+        params[:password], user.password_hash, user.password_salt)
 
         Authy.api_key = ENV['AUTHY_API_KEY']
         one_touch = Authy::OneTouch.send_approval_request(

@@ -8,29 +8,51 @@ describe 'GET /login' do
 end
 
 describe 'POST /login' do
-  it 'authenticate the user when the credentials are correct' do
-    user = double(
+  let(:user) do
+    double(
       'User',
       id: '1',
-      username: 'bob',
       email: 'bob@twilio.com',
       password_hash: 'hash',
       password_salt: 'salt',
       authy_id: '1001'
     )
+  end
 
-    allow(User).to receive(:first).and_return(user)
-    allow(UserAuthenticator).to receive(:authenticate)
-      .with('hash', 'salt', 'secret').and_return(true)
-    allow(Authy::OneTouch).to receive(:send_approval_request)
-      .and_return({"success" => true})
-    allow(SessionManager).to receive(:init_session)
+  context 'when the credentials are correct' do
+    it 'responds with onetouch or sms' do
+      allow(User).to receive(:first).and_return(user)
 
-    allow(user).to receive(:update!).with(authy_status: :onetouch)
+      allow_any_instance_of(TwoFactorAuth::App)
+        .to receive(:valid_password?)
+        .with('secret', 'hash', 'salt')
+        .and_return(true)
 
-    post '/login', email: 'bob@example.com', password: 'secret'
+      allow(Authy::OneTouch)
+        .to receive(:send_approval_request)
+        .and_return({"success" => true})
 
-    expect(last_response.body).to eq("onetouch")
-    expect(last_response).to be_ok
+      allow(user).to receive(:update!).with(authy_status: :onetouch)
+
+      post '/login', email: 'bob@example.com', password: 'secret'
+
+      expect(last_response.body).to eq("onetouch")
+      expect(last_response).to be_ok
+    end
+  end
+
+  context 'when the credentials are incorrect' do
+    it 'responds with onetouch or sms' do
+      allow(User).to receive(:first).and_return(user)
+
+      allow_any_instance_of(TwoFactorAuth::App)
+        .to receive(:valid_password?)
+        .and_return(false)
+
+      post '/login', email: 'bob@example.com', password: 'secret'
+
+      expect(last_response.body).to eq("unauthorized")
+      expect(last_response).to be_ok
+    end
   end
 end

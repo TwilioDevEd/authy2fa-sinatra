@@ -1,3 +1,5 @@
+require 'bcrypt'
+
 module TwoFactorAuth
   module Helpers
     # Authentication
@@ -27,6 +29,18 @@ module TwoFactorAuth
     def destroy_session!
       session[:pre_2fa_auth_user_id] = nil
       session[:user_id] = nil
+    end
+
+    # Password Management
+    def hash_password(plain_password)
+      password_salt = BCrypt::Engine.generate_salt
+      password_hash = BCrypt::Engine.hash_secret(plain_password, password_salt)
+
+      [password_salt, password_hash]
+    end
+
+    def valid_password?(plain_password, password_hash, password_salt)
+      password_hash == BCrypt::Engine.hash_secret(plain_password, password_hash)
     end
   end
 end
