@@ -14,15 +14,15 @@
 example of typical login flow. To run this sample
 app yourself, <a href="https://github.com/TwilioDevEd/authy2fa-sinatra">download the code and follow the instructions on
 GitHub</a>.</p>
-<p>Adding two-factor authentication (2FA) to your web application increases the 
-security of your user&#39;s data. <a href="http://en.wikipedia.org/wiki/Multi-factor_authentication">Multi-factor authentication</a> 
-determines the identity of a user by validating once by logging into the app, 
+<p>Adding two-factor authentication (2FA) to your web application increases the
+security of your user&#39;s data. <a href="http://en.wikipedia.org/wiki/Multi-factor_authentication">Multi-factor authentication</a>
+determines the identity of a user by validating first by logging into the app,
 and second by validating their mobile device.</p>
 <p>For the second factor, we will validate that the user has their mobile phone by either:</p>
 <ul>
 <li>Sending them a OneTouch push notification to their mobile Authy app or</li>
 <li>Sending them a token through their mobile Authy app or</li>
-<li>Sending them a one-time token in a text message <a href="http://www.authy.com/">sent with Authy via Twilio</a>. Here&#39;s how this works at a high level:</li>
+<li>Sending them a one-time token via text message <a href="http://www.authy.com/">sent with Authy via Twilio</a>. Here&#39;s how this works at a high level:</li>
 </ul>
 <p><img src="//s3.amazonaws.com/howtodocs/2fa-high-level.png" alt="2FA High Level"></p>
 <p>Let&#39;s get started! Click the right arrow above to move to the next step
@@ -34,11 +34,11 @@ and second by validating their mobile device.</p>
 <li><a href="//twilio-ruby.readthedocs.org/en/latest/index.html#getting-started">Getting started with the Twilio Ruby gem</a></li>
 </ul>
 </div><div data-title="Configuring Authy" data-file="routes/signup.rb" data-highlight="19" class="step"><h2 id="configuring-authy">Configuring Authy</h2>
-<p>If you haven&#39;t already, now is the time to <a href="//dashboard.authy.com/signup">sign up for Authy</a>. 
-Create your first application, naming it whatever you wish. After you create your application, 
+<p>If you haven&#39;t configured Authy already now is the time to <a href="//dashboard.authy.com/signup">sign up for Authy</a>.
+Create your first application naming it as you wish. After you create your application,
 your &quot;production&quot; API key will be visible on your <a href="//dashboard.authy.com">dashboard</a>:</p>
 <p><img src="//s3.amazonaws.com/howtodocs/2fa-authy-dashboard.png" alt="Authy Dashboard"></p>
-<p>Once we have an Authy API key, we register it as a enrionment variable.</p>
+<p>Once we have an Authy API key we register it as a environment variable.</p>
 <p>Let&#39;s take a look at how we register a user with Authy.</p>
 <hr>
 <p><strong>See Also:</strong></p>
@@ -47,14 +47,14 @@ your &quot;production&quot; API key will be visible on your <a href="//dashboard
 <li><a href="//www.twilio.com/blog/2015/02/managing-development-environment-variables-across-multiple-ruby-applications.html">Managing Environment Variables in Ruby</a></li>
 </ul>
 </div><div data-file="routes/signup.rb" data-highlight="19-24" class="step"><h2 id="registering-a-user-with-authy">Registering a User with Authy</h2>
-<p>When a new user <em>signs up</em> for our website, we call this route, which 
-handles saving our new user to the database as well as registering the user 
+<p>When a new user <em>signs up</em> for our website, we will call this route. This
+will save our new user to the database and will register the user
 with Authy.</p>
-<p>All Authy needs to get a user set up for your application is the <em>email</em>, 
-<em>phone number</em> and <em>country code</em>. In order to do <em>two-factor authentication</em>, 
-we need to make sure we ask for these things at the point of sign up.</p>
-<p>Once we register the User with Authy we get an <strong>authy id</strong> back. This is 
-very important since it&#39;s how we will verify the identity of our User with 
+<p>In order to set up your application, Authy only needs the user&#39;s <em>email</em>,
+<em>phone number</em> and <em>country code</em>. In order to do a <em>two-factor authentication</em>,
+we need to make sure we ask for this information at sign up.</p>
+<p>Once we register the User with Authy we get an <strong>authy id</strong> back. This is
+very important since it&#39;s how we will verify the identity of our User with
 Authy.</p>
 <hr>
 <p><strong>See Also:</strong></p>
@@ -63,33 +63,33 @@ Authy.</p>
 <li><a href="//docs.authy.com/#section-Enabling_two-factor_on_a_user">Enabling a User with Authy</a></li>
 </ul>
 </div><div data-file="routes/sessions.rb" data-highlight="8-27" class="step"><h2 id="logging-in-with-authy-onetouch">Logging in with Authy OneTouch</h2>
-<p>When a User attempts to log in to our website, we will ask them for a second 
-form of authentication. Let&#39;s take a look at OneTouch verification first. </p>
+<p>When a User attempts to log in to our website, we will ask them for a second
+form of authentication. Let&#39;s take a look at OneTouch verification first.</p>
 <p><img src="//howtodocs.s3.amazonaws.com/onetouch-approved.gif" alt="Authy OneTouch Approval"></p>
-<p>OneTouch works like so:</p>
+<p>OneTouch works like this:</p>
 <ul>
 <li>We attempt to send a User a <em>OneTouch Approval Request</em>.</li>
-<li>If the User has OneTouch enabled, we will get a <em>success</em> message back.</li>
+<li>If the User has OneTouch enabled we will get a <em>success</em> message back.</li>
 <li>The User hits <strong>Approve</strong> in their Authy app.</li>
 <li>Authy makes a POST request to our app with an <em>approved</em> status.</li>
 <li>We log the User in.</li>
 </ul>
-<p>In the next steps we&#39;ll look at how we handle cases where the User does not 
+<p>In the next steps we&#39;ll look at how we handle cases where the User does not
 have OneTouch, or denies the login request.</p>
 </div><div data-file="routes/sessions.rb" data-highlight="11-16" class="step"><h2 id="sending-the-onetouch-request">Sending the OneTouch Request</h2>
-<p>When our User logs in we immediately attempt to verify their identity with 
-OneTouch. We will fallback gracefully if they don&#39;t have a OneTouch device, 
+<p>When our User logs in we immediately attempt to verify their identity with
+OneTouch. We will fallback gracefully if they don&#39;t have a OneTouch device,
 but we don&#39;t know until we try.</p>
-<p>Authy lets us pass details with our OneTouch request, including a message, 
-a logo and any other details we want to send. We could easily send any 
-number of details by appending <code>details[&#39;some_detail&#39;]</code>. You could imagine a 
-scenario where we send a OneTouch request to approve a money transfer:</p>
+<p>Authy allows us to input details with our OneTouch request, including a message,
+a logo and so on. We could easily send any amount of details by appending
+<code>details[&#39;some_detail&#39;]</code>. You could imagine a scenario where we send a
+OneTouch request to approve a money transfer.</p>
 <pre><code class="cm-s-monokai lang-ruby"><span class="cm-string">&quot;message&quot;</span> <span class="cm-operator">=&gt;</span> <span class="cm-string">&quot;Request to Send Money to Jarod&#39;s vault&quot;</span>,
 <span class="cm-string">&quot;details[&#39;Request From&#39;]&quot;</span> <span class="cm-operator">=&gt;</span> <span class="cm-string">&quot;Jarod&quot;</span>,
 <span class="cm-string">&quot;details[&#39;Amount Request&#39;]&quot;</span> <span class="cm-operator">=&gt;</span> <span class="cm-string">&quot;1,000,000&quot;</span>,
 <span class="cm-string">&quot;details[&#39;Currency&#39;]&quot;</span> <span class="cm-operator">=&gt;</span> <span class="cm-string">&quot;Galleons&quot;</span>,
 </code></pre>
-<p>Once we send the request we need to update our User&#39;s <code>authy_status</code> based 
+<p>Once we send the request we need to update our User&#39;s <code>authy_status</code> based
 on the response.</p>
 <hr>
 <p><strong>See Also:</strong></p>
@@ -114,8 +114,8 @@ However for this version we&#39;re going to keep it simple and just update the
 <p>We&#39;ve already taken a look at what&#39;s happening on the server side, so let&#39;s
 step in front of the cameras and see how our JavaScript is interacting
 with those server endpoints.</p>
-<p>When we expect a OneTouch response, we will begin polling <code>/authy/status</code>
-until we see Authy status is not empty. Let&#39;s take a look at this controller
+<p>When we expect a OneTouch response, we will begin by polling <code>/authy/status</code>
+until we see an Authy status is not empty. Let&#39;s take a look at this controller
 and see what is happening.</p>
 <hr>
 <p><strong>See Also:</strong></p>
@@ -126,10 +126,10 @@ and see what is happening.</p>
 </div><div data-file="routes/confirmation.rb" data-highlight="27-40" class="step"><h2 id="finish-the-2fa-step">Finish the 2FA Step</h2>
 <p>If <code>authy_status</code> is <em>approved</em> the user will be redirected to the
 protected content, otherwise we&#39;ll show the login form with a message that indicates
-the if the request was <em>denied</em>.</p>
+the request was <em>denied</em>.</p>
 </div><div class="step"><h2 id="where-to-next-">Where to next?</h2>
 <p>That&#39;s it! We&#39;ve just implemented two-factor auth using three different
-methods and the latest in Authy technology.</p>
+methods and the latest Authy technology.</p>
 <p>If you&#39;re a Ruby developer working with Twilio, you might enjoy these
 other tutorials:</p>
 <p><a href="https://www.twilio.com/docs/tutorials/walkthrough/server-notifications/ruby/rails"><strong>SMS and MMS Notifications</strong></a></p>

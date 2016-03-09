@@ -7,15 +7,15 @@
     app yourself, [download the code and follow the instructions on
     GitHub](https://github.com/TwilioDevEd/authy2fa-sinatra).
 
-    Adding two-factor authentication (2FA) to your web application increases the 
-    security of your user's data. [Multi-factor authentication](http://en.wikipedia.org/wiki/Multi-factor_authentication) 
-    determines the identity of a user by validating once by logging into the app, 
+    Adding two-factor authentication (2FA) to your web application increases the
+    security of your user's data. [Multi-factor authentication](http://en.wikipedia.org/wiki/Multi-factor_authentication)
+    determines the identity of a user by validating first by logging into the app,
     and second by validating their mobile device.
 
     For the second factor, we will validate that the user has their mobile phone by either:
     * Sending them a OneTouch push notification to their mobile Authy app or
     * Sending them a token through their mobile Authy app or
-    * Sending them a one-time token in a text message [sent with Authy via Twilio](http://www.authy.com/). Here's how this works at a high level:
+    * Sending them a one-time token via text message [sent with Authy via Twilio](http://www.authy.com/). Here's how this works at a high level:
 
     ![2FA High Level](//s3.amazonaws.com/howtodocs/2fa-high-level.png)
 
@@ -35,13 +35,13 @@
   :markdown
     ## Configuring Authy
 
-    If you haven't already, now is the time to [sign up for Authy](//dashboard.authy.com/signup). 
-    Create your first application, naming it whatever you wish. After you create your application, 
+    If you haven't configured Authy already now is the time to [sign up for Authy](//dashboard.authy.com/signup).
+    Create your first application naming it as you wish. After you create your application,
     your "production" API key will be visible on your [dashboard](//dashboard.authy.com):
 
     ![Authy Dashboard](//s3.amazonaws.com/howtodocs/2fa-authy-dashboard.png)
 
-    Once we have an Authy API key, we register it as a enrionment variable.
+    Once we have an Authy API key we register it as a environment variable.
 
     Let's take a look at how we register a user with Authy.
 
@@ -57,16 +57,16 @@
   :markdown
     ## Registering a User with Authy
 
-    When a new user _signs up_ for our website, we call this route, which 
-    handles saving our new user to the database as well as registering the user 
+    When a new user _signs up_ for our website, we will call this route. This
+    will save our new user to the database and will register the user
     with Authy.
 
-    All Authy needs to get a user set up for your application is the _email_, 
-    _phone number_ and _country code_. In order to do _two-factor authentication_, 
-    we need to make sure we ask for these things at the point of sign up.
+    In order to set up your application, Authy only needs the user's _email_,
+    _phone number_ and _country code_. In order to do a _two-factor authentication_,
+    we need to make sure we ask for this information at sign up.
 
-    Once we register the User with Authy we get an **authy id** back. This is 
-    very important since it's how we will verify the identity of our User with 
+    Once we register the User with Authy we get an **authy id** back. This is
+    very important since it's how we will verify the identity of our User with
     Authy.
 
     ---
@@ -81,19 +81,19 @@
   :markdown
     ## Logging in with Authy OneTouch
 
-    When a User attempts to log in to our website, we will ask them for a second 
-    form of authentication. Let's take a look at OneTouch verification first. 
+    When a User attempts to log in to our website, we will ask them for a second
+    form of authentication. Let's take a look at OneTouch verification first.
 
     ![Authy OneTouch Approval](//howtodocs.s3.amazonaws.com/onetouch-approved.gif)
 
-    OneTouch works like so:
+    OneTouch works like this:
     * We attempt to send a User a _OneTouch Approval Request_.
-    * If the User has OneTouch enabled, we will get a _success_ message back.
+    * If the User has OneTouch enabled we will get a _success_ message back.
     * The User hits **Approve** in their Authy app.
     * Authy makes a POST request to our app with an _approved_ status.
     * We log the User in.
 
-    In the next steps we'll look at how we handle cases where the User does not 
+    In the next steps we'll look at how we handle cases where the User does not
     have OneTouch, or denies the login request.
 
 .step(
@@ -102,14 +102,14 @@
   :markdown
     ## Sending the OneTouch Request
 
-    When our User logs in we immediately attempt to verify their identity with 
-    OneTouch. We will fallback gracefully if they don't have a OneTouch device, 
+    When our User logs in we immediately attempt to verify their identity with
+    OneTouch. We will fallback gracefully if they don't have a OneTouch device,
     but we don't know until we try.
 
-    Authy lets us pass details with our OneTouch request, including a message, 
-    a logo and any other details we want to send. We could easily send any 
-    number of details by appending `details['some_detail']`. You could imagine a 
-    scenario where we send a OneTouch request to approve a money transfer:
+    Authy allows us to input details with our OneTouch request, including a message,
+    a logo and so on. We could easily send any amount of details by appending
+    `details['some_detail']`. You could imagine a scenario where we send a
+    OneTouch request to approve a money transfer.
 
     ```ruby
     "message" => "Request to Send Money to Jarod's vault",
@@ -117,10 +117,10 @@
     "details['Amount Request']" => "1,000,000",
     "details['Currency']" => "Galleons",
     ```
-    Once we send the request we need to update our User's `authy_status` based 
+    Once we send the request we need to update our User's `authy_status` based
     on the response.
 
-    --- 
+    ---
 
     **See Also:**
     * [DataMapper DM-Types](//datamapper.org/docs/dm_more/types.html)
@@ -159,8 +159,8 @@
     step in front of the cameras and see how our JavaScript is interacting
     with those server endpoints.
 
-    When we expect a OneTouch response, we will begin polling `/authy/status`
-    until we see Authy status is not empty. Let's take a look at this controller
+    When we expect a OneTouch response, we will begin by polling `/authy/status`
+    until we see an Authy status is not empty. Let's take a look at this controller
     and see what is happening.
 
     ---
@@ -178,14 +178,14 @@
 
     If `authy_status` is _approved_ the user will be redirected to the
     protected content, otherwise we'll show the login form with a message that indicates
-    the if the request was _denied_.
+    the request was _denied_.
 
 .step
   :markdown
     ## Where to next?
 
     That's it! We've just implemented two-factor auth using three different
-    methods and the latest in Authy technology.
+    methods and the latest Authy technology.
 
     If you're a Ruby developer working with Twilio, you might enjoy these
     other tutorials:
