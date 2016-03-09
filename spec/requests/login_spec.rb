@@ -42,7 +42,7 @@ describe 'POST /login' do
   end
 
   context 'when the credentials are incorrect' do
-    it 'responds with onetouch or sms' do
+    it 'responds with unauthorized' do
       allow(User).to receive(:first).and_return(user)
 
       allow_any_instance_of(TwoFactorAuth::App)
