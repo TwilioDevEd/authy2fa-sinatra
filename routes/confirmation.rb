@@ -38,6 +38,25 @@ module Routes
           redirect '/login'
         end
       end
+
+      app.post '/send-token' do
+        user = User.first(id: current_user)
+        Authy::API.request_sms(id: user.authy_id)
+        'Token has been sent'
+      end
+
+      app.post '/verify-token' do
+        user = User.first(id: current_user)
+        token = Authy::API.verify(id: user.authy_id, token: params[:token])
+        if token.ok?
+          init_session!(user.id)
+          redirect '/protected'
+        else
+          # 'Incorrect code, please try again'
+          destroy_session!
+          redirect '/login'
+        end
+      end
     end
   end
 end
