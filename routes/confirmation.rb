@@ -1,7 +1,7 @@
 module Routes
   module Confirmation
     def self.registered(app)
-      app.post '/callback' do
+      app.post '/authy/callback' do
         authenticate_request!(request)
 
         request.body.rewind
@@ -11,7 +11,7 @@ module Routes
 
         begin
           user = User.first(authy_id: authy_id)
-          user.update(authy_status: authy_status)
+          user.update!(authy_status: authy_status)
         rescue => e
           puts e.message
         end
