@@ -1,3 +1,7 @@
+<a href="http://twilio.com/signal">![](https://s3.amazonaws.com/baugues/signal-logo.png)</a>
+
+Join us in San Francisco May 24-25th to [learn directly from the developers who build Authy](https://www.twilio.com/signal/schedule/2crLXWsVZaA2WIkaCUyYOc/aut).
+
 # Two-Factor Authentication with Ruby and Sinatra
 
 This example application demonstrates how to use Authy as the two-factor authentication provider using [Authy](https://www.authy.com/) and [Sinatra](http://www.sinatrarb.com/).
