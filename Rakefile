@@ -10,6 +10,7 @@ end
 
 RSpec::Core::RakeTask.new :specs do |task|
   task.pattern = Dir['spec/**/*_spec.rb']
+  task.verbose = false
 end
 
 task :default => ['specs']

@@ -53,13 +53,13 @@ module TwoFactorAuth
       raw_params     = JSON.parse(request.body.read)
       sorted_params  = (Hash[raw_params.sort]).to_query
 
-      data = nonce + '|' + request_method + '|' + url + '|' + sorted_params
+      data = "#{nonce}|#{request_method}|#{url}|#{sorted_params}"
 
       authy_api_key = ENV['AUTHY_API_KEY']
       digest = OpenSSL::HMAC.digest('sha256', authy_api_key, data)
       digest_in_base64 = Base64.encode64(digest)
 
-      authy_signature          = (request.env['HTTP_X_AUTHY_SIGNATURE']).strip
+      authy_signature          = (request.env['HTTP_X_AUTHY_SIGNATURE'])
       computed_authy_signature = digest_in_base64.strip
 
       redirect '/login' if authy_signature != computed_authy_signature
