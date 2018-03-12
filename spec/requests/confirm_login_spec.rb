@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative '../spec_utils'
 
 describe 'POST /confirm-login' do
   context 'when the authy_status is approved' do

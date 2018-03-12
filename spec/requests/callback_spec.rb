@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative '../spec_utils'
 
 describe 'POST /authy/callback' do
   context 'when the callback comes from Authy' do

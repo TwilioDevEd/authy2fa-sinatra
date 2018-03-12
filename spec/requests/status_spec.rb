@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative '../spec_utils'
 
 describe 'POST /authy/status' do
   context 'when the status is approved' do

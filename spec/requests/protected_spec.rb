@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative '../spec_utils'
 
 describe 'GET /protected' do
   context 'when the user is authenticated' do
