@@ -1,10 +1,15 @@
 require 'rspec/core/rake_task'
 
+db_names = ['authy2fa_sinatra', 'authy2fa_sinatra_test']
+
 namespace :db do
   desc "create the database"
   task :create, [:username] do |_, args|
-    sh "psql -c 'create database authy2fa_sinatra_test;'"
-    sh "psql -c 'create database authy2fa_sinatra;'"
+    db_names.each do |db_name|
+      sh "createdb #{db_name}" do |ok,res|
+          #empty block to ignore any failed or success status
+      end
+    end
   end
 end
 
