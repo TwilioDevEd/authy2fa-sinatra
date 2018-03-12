@@ -7,6 +7,7 @@ require 'sinatra/base'
 require 'tilt/haml'
 require 'authy'
 require 'json'
+require 'dotenv/load'
 
 require_relative 'models/user'
 require_relative 'helpers'
