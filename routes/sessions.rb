@@ -1,21 +1,29 @@
+require 'haml'
+
 module Routes
   module Sessions
     def self.registered(app)
       app.get '/login' do
-        haml :login
+        haml(:login)
       end
 
       app.post '/login' do
         user = User.first(email: params[:email])
         if user && valid_password?(params[:password], user.password_hash)
           Authy.api_key = ENV['AUTHY_API_KEY']
-          one_touch = Authy::OneTouch.send_approval_request(
-            id: user.authy_id,
-            message: 'Request to Login to Twilio demo app',
-            details: { 'Email Address' => user.email }
-          )
+          user_status = Authy::API.user_status(id: user.authy_id)
+          if user_status['status']['registered']
+            Authy::OneTouch.send_approval_request(
+              id: user.authy_id,
+              message: 'Request to Login to Twilio demo app',
+              details: { 'Email Address' => user.email }
+            )
 
-          status = one_touch['success'] ? :onetouch : :sms
+            status = :onetouch
+          else
+            Authy::API.request_sms(id: user.authy_id)
+            status = :sms
+          end
           user.update!(authy_status: status)
 
           pre_init_session!(user.id)

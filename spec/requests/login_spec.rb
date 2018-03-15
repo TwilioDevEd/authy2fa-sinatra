@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative '../spec_utils'
 
 describe 'GET /login' do
   it 'is successful' do
@@ -27,6 +27,21 @@ describe 'POST /login' do
         .to receive(:valid_password?)
         .with('secret', 'hash')
         .and_return(true)
+
+      httpResponse = OpenStruct.new({
+                         'status' => 200,
+                         'body' => {
+                             'success' => true,
+                             'status' => {
+                                 'registered' => true
+                             }
+                         }.to_json
+                     })
+      response = Authy::Response.new(httpResponse)
+
+      allow(Authy::API)
+          .to receive(:user_status)
+          .and_return(response)
 
       allow(Authy::OneTouch)
         .to receive(:send_approval_request)
