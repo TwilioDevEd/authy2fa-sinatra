@@ -54,7 +54,7 @@ This example application demonstrates how to use Authy as the two-factor authent
    $ ngrok http 9292
    ```
 
-1. Go to your Authy Dashboard and register the callback endpoint under _Settings_. Your endpoint will look like `http://[your-subdomain].ngrok.io/callback`.
+1. Go to your Authy Dashboard and register the callback endpoint under _Settings_. Your endpoint will look like `http://[your-subdomain].ngrok.io/authy/callback`.
 
 1. Check it out at http://[your-subdomain].ngrok.io
 
