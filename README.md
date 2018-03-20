@@ -26,16 +26,6 @@ This example application demonstrates how to use Authy as the two-factor authent
    export AUTHY_API_KEY=YOUR_AUTHY_API_KEY
    ```
 
-1. Create the database
-
-   ```bash
-   $ bundle exec rake db:create
-   ```
-
-   _The application uses PostgreSQL as the persistence layer. If you
-   don't have it already, you should install it. The easiest way is by
-   using [Postgres.app](http://postgresapp.com/)._
-
 1. Make sure the tests succeed
 
    ```
@@ -54,7 +44,7 @@ This example application demonstrates how to use Authy as the two-factor authent
    $ ngrok http 9292
    ```
 
-1. Go to your Authy Dashboard and register the callback endpoint under _Settings_. Your endpoint will look like `http://[your-subdomain].ngrok.io/authy/callback`.
+1. Go to your Twilio Console and register the callback endpoint under your Authy app's _Push Authentication_. Your endpoint will look like `http://[your-subdomain].ngrok.io/authy/callback`.
 
 1. Check it out at http://[your-subdomain].ngrok.io
 

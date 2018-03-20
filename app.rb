@@ -4,7 +4,7 @@ require 'bundler'
 Bundler.require :default, ENV['RACK_ENV'].to_sym
 
 require 'sinatra/base'
-require 'tilt/haml'
+require 'haml'
 require 'authy'
 require 'json'
 require 'dotenv/load'
@@ -15,7 +15,7 @@ require_relative 'routes/signup'
 require_relative 'routes/sessions'
 require_relative 'routes/confirmation'
 
-database_url = 'postgres://localhost/authy2fa_sinatra'
+database_url = "sqlite3://#{Dir.pwd}/development.sqlite3"
 DataMapper.setup(:default, database_url)
 DataMapper.finalize
 User.auto_upgrade!
@@ -38,7 +38,7 @@ module TwoFactorAuth
 
     get '/protected' do
       authenticate!
-
+      
       @user = User.first(id: current_user)
       haml :protected
     end

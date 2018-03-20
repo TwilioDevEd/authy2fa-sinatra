@@ -30,3 +30,5 @@ build/
 
 .rvmrc
 .idea
+
+*.sqlite3
