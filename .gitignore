@@ -32,3 +32,4 @@ build/
 .idea
 
 *.sqlite3
+Dockerfile
