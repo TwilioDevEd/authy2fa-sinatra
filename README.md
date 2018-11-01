@@ -10,7 +10,7 @@ This example application demonstrates how to use Authy as the two-factor authent
 1. First clone this repository and `cd` into it
 
    ```bash
-   $ git clone git@github.com:TwilioDevEd/authy2fa-sinatra.git
+   $ git clone https://github.com/TwilioDevEd/authy2fa-sinatra.git
    $ cd authy2fa-sinatra
    ```
 
