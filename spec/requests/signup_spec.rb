@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative '../spec_utils'
 
 describe 'GET /signup' do
   it 'is successful' do

@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative '../spec_utils'
 
 describe 'POST /verify-token' do
   context 'when the token is valid' do

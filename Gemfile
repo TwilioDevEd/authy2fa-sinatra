@@ -1,14 +1,16 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
+gem 'rack-protection', '1.5.5'
 gem 'haml'
-gem 'pg'
+gem 'sqlite3'
 gem 'data_mapper'
-gem 'dm-postgres-adapter'
+gem 'dm-sqlite-adapter'
 gem 'bcrypt'
-gem 'authy', :git => 'https://github.com/authy/authy-ruby.git'
+gem 'authy'
 gem 'http-cookie'
 gem 'activesupport'
+gem 'dotenv'
 
 group :test, :development do
   gem 'rspec'

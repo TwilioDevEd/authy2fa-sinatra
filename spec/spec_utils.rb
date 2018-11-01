@@ -4,9 +4,9 @@ require 'database_cleaner'
 require_relative File.join('..', 'app')
 
 RSpec.configure do |config|
-  include Rack::Test::Methods
+  config.include Rack::Test::Methods
 
-  database_url = 'postgres://localhost/authy2fa_sinatra_test'
+  database_url = "sqlite3://#{Dir.pwd}/test.sqlite3"
   DataMapper.setup(:default, database_url)
   DataMapper.finalize
   User.auto_upgrade!
