@@ -33,7 +33,8 @@ describe 'POST /login' do
                          'body' => {
                              'success' => true,
                              'status' => {
-                                 'registered' => true
+                                 'registered' => true,
+                                 'devices' => ['iphone']
                              }
                          }.to_json
                      })

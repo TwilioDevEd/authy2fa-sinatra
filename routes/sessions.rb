@@ -12,7 +12,12 @@ module Routes
         if user && valid_password?(params[:password], user.password_hash)
           Authy.api_key = ENV['AUTHY_API_KEY']
           user_status = Authy::API.user_status(id: user.authy_id)
-          if user_status['status']['registered']
+          puts user_status
+          required_devices = ['iphone', 'android']
+          registered_devices = user_status['status']['devices']
+
+          if user_status['status']['registered'] \
+            and (required_devices & registered_devices)
             Authy::OneTouch.send_approval_request(
               id: user.authy_id,
               message: 'Request to Login to Twilio demo app',
