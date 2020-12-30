@@ -9,7 +9,7 @@ gem 'dm-sqlite-adapter'
 gem 'bcrypt'
 gem 'authy'
 gem 'http-cookie'
-gem 'activesupport'
+gem 'activesupport', '>= 5.2.4.3'
 gem 'dotenv'
 
 group :test, :development do
