@@ -1,0 +1,52 @@
+name: Build and test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest]
+        ruby: [ 2.6.4 ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Postgres
+        run: |
+          brew install postgres
+          brew services start postgresql
+          i=10
+          COMMAND='pg_isready'
+          while [ $i -gt 0 ]; do
+            echo "Check PostgreSQL service status"
+            eval $COMMAND && break
+            ((i--))
+            if [ $i == 0 ]; then
+              echo "PostgreSQL service not ready, all attempts exhausted"
+              exit 1
+            fi
+            echo "PostgreSQL service not ready, wait 10 more sec, attempts left: $i"
+            sleep 10
+          done
+      - name: Create Database
+        run: |
+          /usr/local/opt/postgres/bin/createuser -s postgres
+          psql -c 'create database authy2fa_sinatra_test;' -U postgres
+      - name: Setup Ruby ${{ matrix.ruby }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run tests
+        run: bundle exec rake
+        env: 
+          AUTHY_API_KEY: TWILIOAPIKEY00000

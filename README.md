@@ -2,7 +2,7 @@
 
 This example application demonstrates how to use Authy as the two-factor authentication provider using [Authy](https://www.authy.com/) and [Sinatra](http://www.sinatrarb.com/).
 
-[![Build Status](https://travis-ci.org/TwilioDevEd/authy2fa-sinatra.svg?branch=master)](https://travis-ci.org/TwilioDevEd/authy2fa-sinatra)
+[![Build and test](https://github.com/TwilioDevEd/authy2fa-sinatra/actions/workflows/build_test.yml/badge.svg)](https://github.com/TwilioDevEd/authy2fa-sinatra/actions/workflows/build_test.yml)
 
 ## Local Development
 
