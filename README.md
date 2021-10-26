@@ -4,7 +4,7 @@ This example application demonstrates how to use Authy as the two-factor authent
 
 [![Build and test](https://github.com/TwilioDevEd/authy2fa-sinatra/actions/workflows/build_test.yml/badge.svg)](https://github.com/TwilioDevEd/authy2fa-sinatra/actions/workflows/build_test.yml)
 
-## Local Development
+## Get started
 
 
 1. First clone this repository and `cd` into it
@@ -20,10 +20,10 @@ This example application demonstrates how to use Authy as the two-factor authent
    bundle
    ```
 
-1. Export the environment variables
+1. Copy the sample configuration file and edit it to match your configuration.
 
-   ```
-   export AUTHY_API_KEY=YOUR_AUTHY_API_KEY
+   ```bash
+   cp .env.example .env
    ```
 
 1. Make sure the tests succeed
@@ -49,6 +49,14 @@ This example application demonstrates how to use Authy as the two-factor authent
 1. Check it out at http://[your-subdomain].ngrok.io
 
 That's it!
+
+### Configure Development vs Production Settings
+
+By default, this application will run in production mode - stack traces will not be visible in the web browser. If you would like to run this application in development locally, change the `APP_ENV` variable in your `.env` file.
+
+`APP_ENV=development`
+
+For more about development vs production, visit [Sinatra's configuration page](http://sinatrarb.com/configuration.html).
 
 ## Meta
 
