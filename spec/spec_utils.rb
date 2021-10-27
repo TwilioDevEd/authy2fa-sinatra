@@ -1,4 +1,5 @@
 ENV['RACK_ENV'] = 'test'
+ENV['APP_ENV'] = 'test'
 
 require 'database_cleaner'
 require_relative File.join('..', 'app')
