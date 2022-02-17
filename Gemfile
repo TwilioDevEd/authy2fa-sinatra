@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'rack-protection', '1.5.5'
+gem 'rack-protection', '2.2.0'
 gem 'haml'
 gem 'sqlite3'
 gem 'data_mapper'
