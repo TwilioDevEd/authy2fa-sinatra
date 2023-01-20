@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
+gem 'sinatra', '>= 2.0.0'
 gem 'rack-protection', '1.5.5'
 gem 'haml'
 gem 'sqlite3'
@@ -9,7 +9,7 @@ gem 'dm-sqlite-adapter'
 gem 'bcrypt'
 gem 'authy'
 gem 'http-cookie'
-gem 'activesupport'
+gem 'activesupport', '>= 6.1.7.1'
 gem 'dotenv'
 
 group :test, :development do
