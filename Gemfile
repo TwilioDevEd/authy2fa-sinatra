@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
-gem 'rack-protection', '1.5.5'
+gem 'sinatra', '>= 2.2.3'
+gem 'rack-protection', '2.0.0'
 gem 'haml'
 gem 'sqlite3'
 gem 'data_mapper'
@@ -9,7 +9,7 @@ gem 'dm-sqlite-adapter'
 gem 'bcrypt'
 gem 'authy'
 gem 'http-cookie'
-gem 'activesupport'
+gem 'activesupport', '>= 6.1.7.3'
 gem 'dotenv'
 
 group :test, :development do
@@ -18,6 +18,6 @@ group :test, :development do
 end
 
 group :test do
-  gem 'rake'
-  gem 'rack-test'
+  gem 'rake', '>= 12.3.3'
+  gem 'rack-test', '>= 2.0.0'
 end
