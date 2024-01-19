@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
+gem 'sinatra', '>= 4.0.0'
 gem 'rack-protection', '1.5.5'
 gem 'haml'
 gem 'sqlite3'
